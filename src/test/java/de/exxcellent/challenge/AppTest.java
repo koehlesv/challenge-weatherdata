@@ -68,19 +68,19 @@ class AppTest {
 	@Test
 	@DisplayName("CSV Parsing: Weather")
 	void checkCSVParsingWeatherFile() {
-		byte dayResult = App.csvParsing(App.FILE_PATH_WEATHER_CSV, ",", CSVFileType.WEATHER);
-		assertEquals(14, dayResult);
+		String dayResult = App.csvParsing(App.FILE_PATH_WEATHER_CSV, ",", CSVFileType.WEATHER);
+		assertEquals("14", dayResult);
 		dayResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",", CSVFileType.WEATHER);
-		assertEquals(-1, dayResult);
+		assertEquals("-1", dayResult);
 	}
 
 	@Test
 	@DisplayName("CSV Parsing: Football")
 	void checkCSVParsingFootballFile() {
-		byte dayResult = App.csvParsing(App.FILE_PATH_WEATHER_CSV, ",", CSVFileType.FOOTBALL);
-		assertEquals(14, dayResult); // TODO: Change to actual expected value.
-		dayResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",", CSVFileType.FOOTBALL);
-		assertEquals(-1, dayResult);
+		String teamResult = App.csvParsing(App.FILE_PATH_FOOTBALL_CSV, ",", CSVFileType.FOOTBALL);
+		assertEquals("Leicester", teamResult);
+		teamResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",", CSVFileType.FOOTBALL);
+		assertEquals("-1", teamResult);
 	}
 
 	@Test
@@ -106,7 +106,7 @@ class AppTest {
 		float returnValue = App.extractTwoFloatsFromStringArrReturnDifference(textWithoutFloats, 1, 2);
 		assertEquals(-2, returnValue);
 	}
-	
+
 	@Test
 	@DisplayName("Football Team Determination")
 	void footballTeam() {
@@ -114,6 +114,44 @@ class AppTest {
 		int numberOfColumns = App.arrListGetColumnSize(fileContent, ",");
 		String result = App.calculateTeamsWithMinGoalDiff(fileContent, numberOfColumns, ",");
 		assertEquals("Leicester", result);
+	}
+
+	@Test
+	@DisplayName("Result-Message: File does not exist")
+	void errormessageFileDoesNotExist() {
+		String returnMessage = App.errormessageFileDoesntExist(CSVFileType.FOOTBALL);
+		assertEquals(
+				"The file under the given file path src/main/resources/de/exxcellent/challenge/football.csv does not exist.",
+				returnMessage);
+
+		returnMessage = App.errormessageFileDoesntExist(CSVFileType.WEATHER);
+		assertEquals(
+				"The file under the given file path src/main/resources/de/exxcellent/challenge/weather.csv does not exist.",
+				returnMessage);
+	}
+
+	@Test
+	@DisplayName("Result-Message: File is wrongly formatted")
+	void errormessageIsWronglyFormatted() {
+		String returnMessage = App.errormessageFileHasIncorrectFormat(CSVFileType.FOOTBALL);
+		assertEquals(
+				"The given file under src/main/resources/de/exxcellent/challenge/football.csv is not correctly formatted.",
+				returnMessage);
+
+		returnMessage = App.errormessageFileHasIncorrectFormat(CSVFileType.WEATHER);
+		assertEquals(
+				"The given file under src/main/resources/de/exxcellent/challenge/weather.csv is not correctly formatted.",
+				returnMessage);
+	}
+
+	@Test
+	@DisplayName("Result-Message: Correct output given")
+	void correctOutput() {
+		String returnMessage = App.successfullOutput("4", CSVFileType.FOOTBALL);
+		assertEquals("Team with smallest goal spread       : 4", returnMessage);
+
+		returnMessage = App.successfullOutput("17", CSVFileType.WEATHER);
+		assertEquals("Day with smallest temperature spread : 17", returnMessage);
 	}
 
 }

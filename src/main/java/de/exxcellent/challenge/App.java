@@ -22,30 +22,84 @@ public final class App {
 	 * @param args The CLI arguments passed
 	 */
 	public static void main(String... args) {
-		byte dayWithSmallestTempSpread = csvParsing(FILE_PATH_WEATHER_CSV, ",", CSVFileType.WEATHER);
-		outputWeatherData(dayWithSmallestTempSpread);
+		String dayWithSmallestTempSpread = csvParsing(FILE_PATH_WEATHER_CSV, ",", CSVFileType.WEATHER);
+		outputCSVData(dayWithSmallestTempSpread, CSVFileType.WEATHER);
 
-		String teamWithSmallestGoalSpread = "A good team"; // Your goal analysis function call …
-		System.out.printf("Team with smallest goal spread       : %s%n", teamWithSmallestGoalSpread);
+		String teamWithSmallestGoalSpread = csvParsing(FILE_PATH_FOOTBALL_CSV, ",", CSVFileType.FOOTBALL);
+		outputCSVData(teamWithSmallestGoalSpread, CSVFileType.FOOTBALL);
 	}
 
 	/**
-	 * Prints the day with the smallest temperature spread. If the file does not
-	 * exist or is not correctly formatted, an error message is printed instead.
+	 * Prints the day with the smallest temperature spread opr the team with the
+	 * smallest goal difference. If the file does not exist or is not correctly
+	 * formatted, an error message is printed instead.
 	 * 
-	 * @param dayWithSmallestTempSpread The identifier of the day with the smallest
-	 *                                  temperature difference.
+	 * @param result        The team with the smallest goal difference or the day
+	 *                      with the smallest temperature difference.
+	 * @param typeOfCSVFile The type of CSV file.
 	 */
-	public static void outputWeatherData(byte dayWithSmallestTempSpread) {
-		if (dayWithSmallestTempSpread != -1) {
-			if (dayWithSmallestTempSpread != -2) {
-				System.out.printf("Day with smallest temperature spread : %s%n", dayWithSmallestTempSpread);
-			} else {
-				System.err.println("The given file under " + FILE_PATH_WEATHER_CSV + " is not correctly formatted.");
-			}
-		} else {
-			System.err.println("The file under the given file path " + FILE_PATH_WEATHER_CSV + " does not exist.");
+	public static void outputCSVData(String result, CSVFileType typeOfCSVFile) {
+		switch (result) {
+		case "-1":
+			System.err.println(errormessageFileDoesntExist(typeOfCSVFile));
+			break;
+		case "-2":
+			System.err.println(errormessageFileHasIncorrectFormat(typeOfCSVFile));
+			break;
+		default:
+			System.out.println(successfullOutput(result, typeOfCSVFile));
+			break;
 		}
+
+	}
+
+	/**
+	 * To be called if the calculation was succesfull.
+	 * 
+	 * @param result        The calculated result (Day or Team).
+	 * @param typeOfCSVFile The type of the csv file.
+	 * @return Success message.
+	 */
+	public static String successfullOutput(String result, CSVFileType typeOfCSVFile) {
+		switch (typeOfCSVFile) {
+		case FOOTBALL:
+			return "Team with smallest goal spread       : " + result;
+		case WEATHER:
+			return "Day with smallest temperature spread : " + result;
+		}
+		return null;
+	}
+
+	/**
+	 * Output if the file has the wrong format.
+	 * 
+	 * @param typeOfCSVFile The type of the csv file.
+	 * @return Error message.
+	 */
+	public static String errormessageFileHasIncorrectFormat(CSVFileType typeOfCSVFile) {
+		switch (typeOfCSVFile) {
+		case FOOTBALL:
+			return "The given file under " + FILE_PATH_FOOTBALL_CSV + " is not correctly formatted.";
+		case WEATHER:
+			return "The given file under " + FILE_PATH_WEATHER_CSV + " is not correctly formatted.";
+		}
+		return null;
+	}
+
+	/**
+	 * Output if the file does not exist.
+	 * 
+	 * @param typeOfCSVFile The type of the csv file.
+	 * @return Error message.
+	 */
+	public static String errormessageFileDoesntExist(CSVFileType typeOfCSVFile) {
+		switch (typeOfCSVFile) {
+		case FOOTBALL:
+			return "The file under the given file path " + FILE_PATH_FOOTBALL_CSV + " does not exist.";
+		case WEATHER:
+			return "The file under the given file path " + FILE_PATH_WEATHER_CSV + " does not exist.";
+		}
+		return null;
 	}
 
 	/**
@@ -130,7 +184,7 @@ public final class App {
 		float differenceInGoals = Integer.MAX_VALUE;
 		float currentDifference;
 		String teamWithMinimalDifference = null;
-		for (int i = NUMBER_OF_OFFSET_LINES_WEATHER_CSV_FILE; i < fileContent.size(); i++) {
+		for (int i = NUMBER_OF_OFFSET_LINES_FOOTBALL_CSV_FILE; i < fileContent.size(); i++) {
 			currentTeam = fileContent.get(i).split(separator);
 			currentDifference = extractTwoFloatsFromStringArrReturnDifference(currentTeam, 5, 6);
 			if (currentDifference == -2) {
@@ -160,23 +214,23 @@ public final class App {
 	 *         typeOfCSVFile. If the file content is null or the given csv type is
 	 *         not yet implemented, it returns -1 instead.
 	 */
-	public static byte csvParsing(String filePath, String separator, CSVFileType typeOfCSVFile) {
+	public static String csvParsing(String filePath, String separator, CSVFileType typeOfCSVFile) {
 		ArrayList<String> fileContent = new ArrayList<String>();
 		fileContent = readFile(filePath);
 		if (fileContent != null) {
 			int numberOfColumns = arrListGetColumnSize(fileContent, separator);
-			byte result = -1;
+			String result = "-1";
 			switch (typeOfCSVFile) {
 			case FOOTBALL:
-				// TODO: Calculate Football.
+				result = calculateTeamsWithMinGoalDiff(fileContent, numberOfColumns, separator);
 				break;
 			case WEATHER:
-				result = calculateDayWithMinTempDiff(fileContent, numberOfColumns, separator);
+				result = calculateDayWithMinTempDiff(fileContent, numberOfColumns, separator) + "";
 				break;
 			}
 			return result;
 		} else {
-			return -1;
+			return "-1";
 		}
 	}
 
