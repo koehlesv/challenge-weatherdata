@@ -8,6 +8,7 @@ import java.util.Scanner;
 public final class App {
 
 	public static final String FILE_PATH_WEATHER_CSV = "src/main/resources/de/exxcellent/challenge/weather.csv";
+	public static final String FILE_PATH_FOOTBALL_CSV = "src/main/resources/de/exxcellent/challenge/football.csv";
 	private static final int NUMBER_OF_OFFSET_LINES_CSV_FILE = 1;
 
 	/**
