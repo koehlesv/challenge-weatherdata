@@ -1,8 +1,9 @@
 package de.exxcellent.challenge;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import de.exxcellent.challenge.App.CSVFileType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 /**
  * JUnit-Tests
+ * 
  * @author Sven
  *
  */
@@ -64,11 +66,20 @@ class AppTest {
 	}
 
 	@Test
-	@DisplayName("CSV Parsing")
-	void checkCSVParsing() {
-		byte dayResult = App.csvParsing(App.FILE_PATH_WEATHER_CSV, ",");
+	@DisplayName("CSV Parsing: Weather")
+	void checkCSVParsingWeatherFile() {
+		byte dayResult = App.csvParsing(App.FILE_PATH_WEATHER_CSV, ",", CSVFileType.WEATHER);
 		assertEquals(14, dayResult);
-		dayResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",");
+		dayResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",", CSVFileType.WEATHER);
+		assertEquals(-1, dayResult);
+	}
+
+	@Test
+	@DisplayName("CSV Parsing: Football")
+	void checkCSVParsingFootballFile() {
+		byte dayResult = App.csvParsing(App.FILE_PATH_WEATHER_CSV, ",", CSVFileType.FOOTBALL);
+		assertEquals(14, dayResult); // TODO: Change to actual expected value.
+		dayResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",", CSVFileType.FOOTBALL);
 		assertEquals(-1, dayResult);
 	}
 

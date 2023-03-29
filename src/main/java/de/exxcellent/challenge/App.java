@@ -7,9 +7,14 @@ import java.util.Scanner;
 
 public final class App {
 
+	enum CSVFileType {
+		WEATHER, FOOTBALL
+	}
+
 	public static final String FILE_PATH_WEATHER_CSV = "src/main/resources/de/exxcellent/challenge/weather.csv";
 	public static final String FILE_PATH_FOOTBALL_CSV = "src/main/resources/de/exxcellent/challenge/football.csv";
-	private static final int NUMBER_OF_OFFSET_LINES_CSV_FILE = 1;
+	private static final int NUMBER_OF_OFFSET_LINES_WEATHER_CSV_FILE = 1;
+	private static final int NUMBER_OF_OFFSET_LINES_FOOTBALL_CSV_FILE = 1;
 
 	/**
 	 * This is the main entry method.
@@ -17,7 +22,7 @@ public final class App {
 	 * @param args The CLI arguments passed
 	 */
 	public static void main(String... args) {
-		byte dayWithSmallestTempSpread = csvParsing(FILE_PATH_WEATHER_CSV, ",");
+		byte dayWithSmallestTempSpread = csvParsing(FILE_PATH_WEATHER_CSV, ",", CSVFileType.WEATHER);
 		outputWeatherData(dayWithSmallestTempSpread);
 
 		String teamWithSmallestGoalSpread = "A good team"; // Your goal analysis function call …
@@ -80,7 +85,7 @@ public final class App {
 	 * Finds and returns the day with the minimal temperature spread.
 	 * 
 	 * @param fileContent     The content of the given file, linewise.
-	 * @param numberOfColumns he number of columns in the given file.
+	 * @param numberOfColumns The number of columns in the given file.
 	 * @param separator       The used separator which seperates the columns.
 	 * @return The day with the minimal difference between maximum and minimum
 	 *         temperature. If the file is not correctly formatted, it returns -2
@@ -92,7 +97,7 @@ public final class App {
 		float differenceMaxMinTemperature = Integer.MAX_VALUE;
 		float currentDifference;
 		byte dayWithMinimalDifference = -1;
-		for (int i = NUMBER_OF_OFFSET_LINES_CSV_FILE; i < fileContent.size(); i++) {
+		for (int i = NUMBER_OF_OFFSET_LINES_WEATHER_CSV_FILE; i < fileContent.size(); i++) {
 			currentDay = fileContent.get(i).split(separator);
 			currentDifference = extractFloatFromStringArr(currentDay);
 			if (currentDifference == -2) {
@@ -117,15 +122,24 @@ public final class App {
 	 * @param separator The used separator which seperates the different columns in
 	 *                  the base file.
 	 * @return The day with the minimal temperature spread. If the file content is
-	 *         null, it returns -1 instead.
+	 *         null or the given csv type is not yet implemented, it returns -1
+	 *         instead.
 	 */
-	public static byte csvParsing(String filePath, String separator) {
+	public static byte csvParsing(String filePath, String separator, CSVFileType typeOfCSVFile) {
 		ArrayList<String> fileContent = new ArrayList<String>();
 		fileContent = readFile(filePath);
 		if (fileContent != null) {
 			int numberOfColumns = arrListGetColumnSize(fileContent, separator);
-			byte dayWithMinimalTempDifference = calculateDayWithMinTempDiff(fileContent, numberOfColumns, separator);
-			return dayWithMinimalTempDifference;
+			byte result = -1;
+			switch (typeOfCSVFile) {
+			case FOOTBALL:
+				// TODO: Calculate Football.
+				break;
+			case WEATHER:
+				result = calculateDayWithMinTempDiff(fileContent, numberOfColumns, separator);
+				break;
+			}
+			return result;
 		} else {
 			return -1;
 		}
