@@ -114,7 +114,16 @@ public final class App {
 		}
 		return dayWithMinimalDifference;
 	}
-	
+
+	/**
+	 * Finds and returns the team with the minimal goal difference.
+	 * 
+	 * @param fileContent     The content of the given file, linewise.
+	 * @param numberOfColumns The number of columns in the given file.
+	 * @param separator       The used separator which seperates the columns.
+	 * @return The team with the minimal difference between goals shot and goals
+	 *         taken. If the file is not correctly formatted, it returns -2 instead.
+	 */
 	public static String calculateTeamsWithMinGoalDiff(ArrayList<String> fileContent, int numberOfColumns,
 			String separator) {
 		String[] currentTeam = new String[numberOfColumns];
@@ -142,12 +151,14 @@ public final class App {
 	/**
 	 * Extracts the data of the csv-file.
 	 * 
-	 * @param filePath  The path where the CSV-File is located.
-	 * @param separator The used separator which seperates the different columns in
-	 *                  the base file.
-	 * @return The day with the minimal temperature spread. If the file content is
-	 *         null or the given csv type is not yet implemented, it returns -1
-	 *         instead.
+	 * @param filePath      The path where the CSV-File is located.
+	 * @param separator     The used separator which seperates the different columns
+	 *                      in the base file.
+	 * @param typeOfCSVFile The type of CSV-File (either weather or football).
+	 * @return The day with the minimal temperature spread or the team with minimal
+	 *         goal difference, depending on the value of the variable
+	 *         typeOfCSVFile. If the file content is null or the given csv type is
+	 *         not yet implemented, it returns -1 instead.
 	 */
 	public static byte csvParsing(String filePath, String separator, CSVFileType typeOfCSVFile) {
 		ArrayList<String> fileContent = new ArrayList<String>();
@@ -170,15 +181,18 @@ public final class App {
 	}
 
 	/**
-	 * For a given day this method calculates the difference between two float values at given positions in a String array.
+	 * For a given day this method calculates the difference between two float
+	 * values at given positions in a String array.
 	 * 
-	 * @param textArrayContainingFloats The text-array where the two floats should be extracted from.
-	 * @param indexOfFirstValue Index of the first float value.
-	 * @param indexOfSecondValue Index of the second float value.
-	 * @return The temperature-difference on the current day. If the file is not
+	 * @param textArrayContainingFloats The text-array where the two floats should
+	 *                                  be extracted from.
+	 * @param indexOfFirstValue         Index of the first float value.
+	 * @param indexOfSecondValue        Index of the second float value.
+	 * @return The difference between the two float values. If the file is not
 	 *         correctly formatted, it returns -2 instead.
 	 */
-	public static Float extractTwoFloatsFromStringArrReturnDifference(String[] textArrayContainingFloats, int indexOfFirstValue, int indexOfSecondValue) {
+	public static Float extractTwoFloatsFromStringArrReturnDifference(String[] textArrayContainingFloats,
+			int indexOfFirstValue, int indexOfSecondValue) {
 		try {
 			float firstValue = Float.parseFloat(textArrayContainingFloats[indexOfFirstValue]);
 			float secondValue = Float.parseFloat(textArrayContainingFloats[indexOfSecondValue]);
