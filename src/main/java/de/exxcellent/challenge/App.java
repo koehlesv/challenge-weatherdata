@@ -99,7 +99,7 @@ public final class App {
 		byte dayWithMinimalDifference = -1;
 		for (int i = NUMBER_OF_OFFSET_LINES_WEATHER_CSV_FILE; i < fileContent.size(); i++) {
 			currentDay = fileContent.get(i).split(separator);
-			currentDifference = extractFloatFromStringArr(currentDay);
+			currentDifference = extractTwoFloatsFromStringArrReturnDifference(currentDay, 1, 2);
 			if (currentDifference == -2) {
 				return -2;
 			}
@@ -113,6 +113,30 @@ public final class App {
 			}
 		}
 		return dayWithMinimalDifference;
+	}
+	
+	public static String calculateTeamsWithMinGoalDiff(ArrayList<String> fileContent, int numberOfColumns,
+			String separator) {
+		String[] currentTeam = new String[numberOfColumns];
+		float differenceInGoals = Integer.MAX_VALUE;
+		float currentDifference;
+		String teamWithMinimalDifference = null;
+		for (int i = NUMBER_OF_OFFSET_LINES_WEATHER_CSV_FILE; i < fileContent.size(); i++) {
+			currentTeam = fileContent.get(i).split(separator);
+			currentDifference = extractTwoFloatsFromStringArrReturnDifference(currentTeam, 5, 6);
+			if (currentDifference == -2) {
+				return "-2";
+			}
+			if (currentDifference < differenceInGoals) {
+				try {
+					teamWithMinimalDifference = currentTeam[0];
+				} catch (NumberFormatException e) {
+					return "-2";
+				}
+				differenceInGoals = currentDifference;
+			}
+		}
+		return teamWithMinimalDifference;
 	}
 
 	/**
@@ -146,18 +170,19 @@ public final class App {
 	}
 
 	/**
-	 * For a given day this method calculates the difference between maximum and
-	 * minimum temperature.
+	 * For a given day this method calculates the difference between two float values at given positions in a String array.
 	 * 
-	 * @param currentDay One line of the table.
+	 * @param textArrayContainingFloats The text-array where the two floats should be extracted from.
+	 * @param indexOfFirstValue Index of the first float value.
+	 * @param indexOfSecondValue Index of the second float value.
 	 * @return The temperature-difference on the current day. If the file is not
 	 *         correctly formatted, it returns -2 instead.
 	 */
-	public static Float extractFloatFromStringArr(String[] currentDay) {
+	public static Float extractTwoFloatsFromStringArrReturnDifference(String[] textArrayContainingFloats, int indexOfFirstValue, int indexOfSecondValue) {
 		try {
-			float currentDayMxT = Float.parseFloat(currentDay[1]);
-			float currentDayMnT = Float.parseFloat(currentDay[2]);
-			float currentDifference = currentDayMxT - currentDayMnT;
+			float firstValue = Float.parseFloat(textArrayContainingFloats[indexOfFirstValue]);
+			float secondValue = Float.parseFloat(textArrayContainingFloats[indexOfSecondValue]);
+			float currentDifference = firstValue - secondValue;
 			return currentDifference;
 		} catch (NumberFormatException | ArrayIndexOutOfBoundsException | NullPointerException e) {
 			return (float) -2;

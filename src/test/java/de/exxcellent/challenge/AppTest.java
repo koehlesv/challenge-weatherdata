@@ -87,7 +87,7 @@ class AppTest {
 	@DisplayName("Float Parsing: Correct Data")
 	void floatParsingCorrectData() {
 		String[] workingText = { "2", "1", "0" };
-		float returnValue = App.extractFloatFromStringArr(workingText);
+		float returnValue = App.extractTwoFloatsFromStringArrReturnDifference(workingText, 1, 2);
 		assertEquals(1, returnValue);
 	}
 
@@ -95,7 +95,7 @@ class AppTest {
 	@DisplayName("Float Parsing: Too Few Array Fields")
 	void floatParsingSmallArray() {
 		String[] textWithTooFewArrayFields = { "2" };
-		float returnValue = App.extractFloatFromStringArr(textWithTooFewArrayFields);
+		float returnValue = App.extractTwoFloatsFromStringArrReturnDifference(textWithTooFewArrayFields, 1, 2);
 		assertEquals(-2, returnValue);
 	}
 
@@ -103,8 +103,17 @@ class AppTest {
 	@DisplayName("Float Parsing: Actual Strings instead of Floats")
 	void floatParsingWrongStrings() {
 		String[] textWithoutFloats = { "Alpha", "Beta", "Gamma" };
-		float returnValue = App.extractFloatFromStringArr(textWithoutFloats);
+		float returnValue = App.extractTwoFloatsFromStringArrReturnDifference(textWithoutFloats, 1, 2);
 		assertEquals(-2, returnValue);
+	}
+	
+	@Test
+	@DisplayName("Football Team Determination")
+	void footballTeam() {
+		ArrayList<String> fileContent = App.readFile(App.FILE_PATH_FOOTBALL_CSV);
+		int numberOfColumns = App.arrListGetColumnSize(fileContent, ",");
+		String result = App.calculateTeamsWithMinGoalDiff(fileContent, numberOfColumns, ",");
+		assertEquals("Leicester", result);
 	}
 
 }
