@@ -235,8 +235,8 @@ public final class App {
 	}
 
 	/**
-	 * For a given day this method calculates the difference between two float
-	 * values at given positions in a String array.
+	 * For a given day this method calculates the absolute difference between two
+	 * float values at given positions in a String array.
 	 * 
 	 * @param textArrayContainingFloats The text-array where the two floats should
 	 *                                  be extracted from.
@@ -250,7 +250,7 @@ public final class App {
 		try {
 			float firstValue = Float.parseFloat(textArrayContainingFloats[indexOfFirstValue]);
 			float secondValue = Float.parseFloat(textArrayContainingFloats[indexOfSecondValue]);
-			float currentDifference = firstValue - secondValue;
+			float currentDifference = Math.abs(firstValue - secondValue);
 			return currentDifference;
 		} catch (NumberFormatException | ArrayIndexOutOfBoundsException | NullPointerException e) {
 			return (float) -2;

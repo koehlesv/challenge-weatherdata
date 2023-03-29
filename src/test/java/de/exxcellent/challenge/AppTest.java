@@ -78,7 +78,7 @@ class AppTest {
 	@DisplayName("CSV Parsing: Football")
 	void checkCSVParsingFootballFile() {
 		String teamResult = App.csvParsing(App.FILE_PATH_FOOTBALL_CSV, ",", CSVFileType.FOOTBALL);
-		assertEquals("Leicester", teamResult);
+		assertEquals("Aston_Villa", teamResult);
 		teamResult = App.csvParsing(PATH_TO_NONEXISTING_FILE, ",", CSVFileType.FOOTBALL);
 		assertEquals("-1", teamResult);
 	}
@@ -113,7 +113,7 @@ class AppTest {
 		ArrayList<String> fileContent = App.readFile(App.FILE_PATH_FOOTBALL_CSV);
 		int numberOfColumns = App.arrListGetColumnSize(fileContent, ",");
 		String result = App.calculateTeamsWithMinGoalDiff(fileContent, numberOfColumns, ",");
-		assertEquals("Leicester", result);
+		assertEquals("Aston_Villa", result);
 	}
 
 	@Test
