@@ -120,13 +120,11 @@ class AppTest {
 	@DisplayName("Result-Message: File does not exist")
 	void errormessageFileDoesNotExist() {
 		String returnMessage = App.errormessageFileDoesntExist(CSVFileType.FOOTBALL);
-		assertEquals(
-				"The file under the given file path src/main/resources/de/exxcellent/challenge/football.csv does not exist.",
+		assertEquals("The file under the given file path " + App.FILE_PATH_FOOTBALL_CSV + " does not exist.",
 				returnMessage);
 
 		returnMessage = App.errormessageFileDoesntExist(CSVFileType.WEATHER);
-		assertEquals(
-				"The file under the given file path src/main/resources/de/exxcellent/challenge/weather.csv does not exist.",
+		assertEquals("The file under the given file path " + App.FILE_PATH_WEATHER_CSV + " does not exist.",
 				returnMessage);
 	}
 
@@ -134,13 +132,11 @@ class AppTest {
 	@DisplayName("Result-Message: File is wrongly formatted")
 	void errormessageIsWronglyFormatted() {
 		String returnMessage = App.errormessageFileHasIncorrectFormat(CSVFileType.FOOTBALL);
-		assertEquals(
-				"The given file under src/main/resources/de/exxcellent/challenge/football.csv is not correctly formatted.",
+		assertEquals("The given file under " + App.FILE_PATH_FOOTBALL_CSV + " is not correctly formatted.",
 				returnMessage);
 
 		returnMessage = App.errormessageFileHasIncorrectFormat(CSVFileType.WEATHER);
-		assertEquals(
-				"The given file under src/main/resources/de/exxcellent/challenge/weather.csv is not correctly formatted.",
+		assertEquals("The given file under " + App.FILE_PATH_WEATHER_CSV + " is not correctly formatted.",
 				returnMessage);
 	}
 
